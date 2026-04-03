@@ -1,4 +1,4 @@
-import { Play, Pause, RotateCcw, Settings } from 'lucide-react'
+import { Play, Pause, RotateCcw } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -7,7 +7,6 @@ import type { GameClockState, GameClockActions } from '@/hooks/useGameClock'
 export interface GameClockProps {
   state: GameClockState
   actions: GameClockActions
-  onSettingsOpen: () => void
 }
 
 function formatTime(ms: number): string {
@@ -77,7 +76,7 @@ function PlayerTimer({ label, timeMs, turnCount, isActive, isRunning }: PlayerTi
   )
 }
 
-export function GameClock({ state, actions, onSettingsOpen }: GameClockProps) {
+export function GameClock({ state, actions }: GameClockProps) {
   const {
     player1Time,
     player2Time,
@@ -118,50 +117,38 @@ export function GameClock({ state, actions, onSettingsOpen }: GameClockProps) {
           Bytt tur
         </Button>
 
-        <div className="flex items-center justify-between gap-2">
-          <div className="flex gap-2">
-            {!isPaused ? (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={actions.pause}
-                disabled={!isRunning}
-                className="gap-1.5"
-              >
-                <Pause className="size-4" />
-                Pause
-              </Button>
-            ) : (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={actions.resume}
-                className="gap-1.5"
-              >
-                <Play className="size-4" />
-                Fortsett
-              </Button>
-            )}
-
+        <div className="flex gap-2">
+          {!isPaused ? (
             <Button
               variant="outline"
               size="sm"
-              onClick={actions.reset}
+              onClick={actions.pause}
+              disabled={!isRunning}
               className="gap-1.5"
             >
-              <RotateCcw className="size-4" />
-              Nullstill
+              <Pause className="size-4" />
+              Pause
             </Button>
-          </div>
+          ) : (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={actions.resume}
+              className="gap-1.5"
+            >
+              <Play className="size-4" />
+              Fortsett
+            </Button>
+          )}
 
           <Button
-            variant="ghost"
+            variant="outline"
             size="sm"
-            onClick={onSettingsOpen}
-            className="gap-1.5 text-muted-foreground"
+            onClick={actions.reset}
+            className="gap-1.5"
           >
-            <Settings className="size-4" />
-            Innstillinger
+            <RotateCcw className="size-4" />
+            Nullstill
           </Button>
         </div>
       </CardContent>

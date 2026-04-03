@@ -44,13 +44,25 @@ export function GameClockSettings({ config, onConfigChange, onStart }: GameClock
     ? String(currentIncSec)
     : null
 
+  const [isCustomTime, setIsCustomTime] = useState(matchedTimePreset === 'custom')
   const [customMinutes, setCustomMinutes] = useState(
     matchedTimePreset === 'custom' ? String(currentMinutes) : ''
   )
 
+  const [isCustomIncrement, setIsCustomIncrement] = useState(matchedIncPreset === null)
+  const [customSeconds, setCustomSeconds] = useState(
+    matchedIncPreset === null ? String(currentIncSec) : ''
+  )
+
   function handleTimePreset(value: string[]) {
     const last = value[value.length - 1]
-    if (!last || last === 'custom') return
+    if (!last) return
+    if (last === 'custom') {
+      setIsCustomTime(true)
+      setCustomMinutes(String(currentMinutes))
+      return
+    }
+    setIsCustomTime(false)
     const minutes = parseInt(last, 10)
     if (!isNaN(minutes) && minutes > 0) {
       onConfigChange({ ...config, timePerPlayer: minutesToMs(minutes) })
@@ -68,8 +80,22 @@ export function GameClockSettings({ config, onConfigChange, onStart }: GameClock
   function handleIncrement(value: string[]) {
     const last = value[value.length - 1]
     if (last === undefined) return
+    if (last === 'custom') {
+      setIsCustomIncrement(true)
+      setCustomSeconds(String(currentIncSec))
+      return
+    }
+    setIsCustomIncrement(false)
     const sec = parseInt(last, 10)
     if (!isNaN(sec)) {
+      onConfigChange({ ...config, incrementPerTurn: secondsToMs(sec) })
+    }
+  }
+
+  function handleCustomIncrement(raw: string) {
+    setCustomSeconds(raw)
+    const sec = parseInt(raw, 10)
+    if (!isNaN(sec) && sec >= 0 && sec <= 300) {
       onConfigChange({ ...config, incrementPerTurn: secondsToMs(sec) })
     }
   }
@@ -88,7 +114,7 @@ export function GameClockSettings({ config, onConfigChange, onStart }: GameClock
             Tid per spiller
           </Label>
           <ToggleGroup
-            value={[matchedTimePreset]}
+            value={[isCustomTime ? 'custom' : matchedTimePreset]}
             onValueChange={handleTimePreset}
             variant="outline"
             spacing={1}
@@ -103,9 +129,15 @@ export function GameClockSettings({ config, onConfigChange, onStart }: GameClock
                 {min} min
               </ToggleGroupItem>
             ))}
+            <ToggleGroupItem
+              value="custom"
+              className="h-9 px-4 text-sm font-medium data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
+            >
+              Egen
+            </ToggleGroupItem>
           </ToggleGroup>
 
-          {matchedTimePreset === 'custom' && (
+          {isCustomTime && (
             <div className="flex items-center gap-2">
               <Input
                 type="number"
@@ -126,7 +158,7 @@ export function GameClockSettings({ config, onConfigChange, onStart }: GameClock
             Tilleggstid per tur
           </Label>
           <ToggleGroup
-            value={matchedIncPreset !== null ? [matchedIncPreset] : [String(currentIncSec)]}
+            value={[isCustomIncrement ? 'custom' : (matchedIncPreset ?? 'custom')]}
             onValueChange={handleIncrement}
             variant="outline"
             spacing={1}
@@ -141,7 +173,28 @@ export function GameClockSettings({ config, onConfigChange, onStart }: GameClock
                 {sec === 0 ? '0 sek' : `+${sec} sek`}
               </ToggleGroupItem>
             ))}
+            <ToggleGroupItem
+              value="custom"
+              className="h-9 px-4 text-sm font-medium data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
+            >
+              Egen
+            </ToggleGroupItem>
           </ToggleGroup>
+
+          {isCustomIncrement && (
+            <div className="flex items-center gap-2">
+              <Input
+                type="number"
+                min={0}
+                max={300}
+                value={customSeconds}
+                onChange={(e) => handleCustomIncrement(e.target.value)}
+                className="w-24 h-9 text-center"
+                placeholder="sek"
+              />
+              <span className="text-sm text-muted-foreground">sek</span>
+            </div>
+          )}
         </div>
 
         <div className="flex flex-col gap-2">
