@@ -56,6 +56,15 @@ function AppContent() {
     search(query, mode, filters, sort, sortDirection)
   }, [query, mode, filters, sort, sortDirection, isLoading]) // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Re-sort anagram results when sort/sortDirection changes (without requiring button press)
+  useEffect(() => {
+    if (isLoading) return
+    if (mode !== 'anagram') return
+    if (!hasSearched || !query.trim()) return
+
+    search(query, mode, filters, sort, sortDirection)
+  }, [sort, sortDirection]) // eslint-disable-line react-hooks/exhaustive-deps
+
   // If URL had a query on mount, trigger search after loading completes
   useEffect(() => {
     if (isLoading) return

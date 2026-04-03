@@ -90,31 +90,34 @@ export class SearchEngine {
 
     const blankCount = (l.match(/\?/g) ?? []).length
     const fixedLetters = l.replace(/\?/g, '')
-
-    if (blankCount === 0) {
-      const key = sortLetters(l)
-      const indices = this.anagramIndex.get(key) ?? []
-      return indices.filter((i) => {
-        const word = words[i]!
-        return this.passesFilters(word, filters)
-      })
-    }
-
     const matchedIndices = new Set<number>()
-    this.expandBlanks(fixedLetters, blankCount, (expanded) => {
-      const key = sortLetters(expanded)
-      const indices = this.anagramIndex.get(key)
-      if (indices) {
-        for (const i of indices) {
-          if (!matchedIndices.has(i)) {
-            const word = words[i]!
-            if (this.passesFilters(word, filters)) {
-              matchedIndices.add(i)
+    const checkedKeys = new Set<string>()
+
+    const processLetterSet = (letterSet: string) => {
+      const sorted = sortLetters(letterSet)
+      const subsets = this.generateSortedSubsets(sorted, 2)
+      for (const key of subsets) {
+        if (checkedKeys.has(key)) continue
+        checkedKeys.add(key)
+        const indices = this.anagramIndex.get(key)
+        if (indices) {
+          for (const i of indices) {
+            if (!matchedIndices.has(i)) {
+              const word = words[i]!
+              if (this.passesFilters(word, filters)) {
+                matchedIndices.add(i)
+              }
             }
           }
         }
       }
-    })
+    }
+
+    if (blankCount === 0) {
+      processLetterSet(fixedLetters)
+    } else {
+      this.expandBlanks(fixedLetters, blankCount, processLetterSet)
+    }
 
     return Array.from(matchedIndices)
   }
@@ -151,6 +154,29 @@ export class SearchEngine {
     for (const letter of NORWEGIAN_LETTERS) {
       this.expandBlanks(fixed + letter, blanksLeft - 1, callback)
     }
+  }
+
+  private generateSortedSubsets(sorted: string, minLen: number): string[] {
+    const results: string[] = []
+    const seen = new Set<string>()
+    const chars = sorted.split('')
+
+    const recurse = (start: number, current: string) => {
+      if (current.length >= minLen) {
+        if (!seen.has(current)) {
+          seen.add(current)
+          results.push(current)
+        }
+      }
+      if (current.length === chars.length) return
+      for (let i = start; i < chars.length; i++) {
+        if (i > start && chars[i] === chars[i - 1]) continue
+        recurse(i + 1, current + chars[i])
+      }
+    }
+
+    recurse(0, '')
+    return results
   }
 
   private buildResults(indices: number[], sort: SortMode, sortDirection: SortDirection, query: string): Array<{ word: string; score: number; length: number }> {

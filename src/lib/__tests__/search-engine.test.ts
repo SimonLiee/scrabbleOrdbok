@@ -42,7 +42,6 @@ describe('textSearch', () => {
       filters: DEFAULT_FILTERS,
       sort: 'alphabetical',
       sortDirection: 'asc',
-      sortDirection: 'asc',
     })
     const words = results.results.map((r) => r.word)
     expect(words).toContain('hest')
@@ -160,6 +159,55 @@ describe('anagramSearch', () => {
       sortDirection: 'asc',
     })
     expect(results.results).toHaveLength(0)
+  })
+
+  it('returns subset anagrams (shorter words from given letters)', () => {
+    const subsetWords = ['hi', 'hei', 'hie', 'heim', 'mhi', 'ei', 'em']
+    const subsetEngine = new SearchEngine(subsetWords)
+    const results = subsetEngine.search({
+      query: 'ieh',
+      mode: 'anagram',
+      filters: { ...DEFAULT_FILTERS, minLength: 1 },
+      sort: 'alphabetical',
+      sortDirection: 'asc',
+    })
+    const words = results.results.map((r) => r.word)
+    expect(words).toContain('hi')
+    expect(words).toContain('hei')
+    expect(words).toContain('hie')
+    expect(words).toContain('ei')
+    expect(words).not.toContain('heim')
+    expect(words).not.toContain('em')
+  })
+
+  it('subset anagrams respects minLength filter', () => {
+    const subsetWords = ['hi', 'hei', 'hie']
+    const subsetEngine = new SearchEngine(subsetWords)
+    const results = subsetEngine.search({
+      query: 'ieh',
+      mode: 'anagram',
+      filters: { ...DEFAULT_FILTERS, minLength: 3 },
+      sort: 'alphabetical',
+      sortDirection: 'asc',
+    })
+    const words = results.results.map((r) => r.word)
+    expect(words).toContain('hei')
+    expect(words).toContain('hie')
+    expect(words).not.toContain('hi')
+  })
+
+  it('subset anagrams with blanks finds additional words', () => {
+    const subsetWords = ['hi', 'hit', 'ti', 'it']
+    const subsetEngine = new SearchEngine(subsetWords)
+    const results = subsetEngine.search({
+      query: 'h?',
+      mode: 'anagram',
+      filters: { ...DEFAULT_FILTERS, minLength: 2 },
+      sort: 'alphabetical',
+      sortDirection: 'asc',
+    })
+    const words = results.results.map((r) => r.word)
+    expect(words).toContain('hi')
   })
 })
 

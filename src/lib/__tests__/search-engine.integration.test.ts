@@ -168,6 +168,111 @@ describe('Anagram search', () => {
     expect(response.results).toHaveLength(0)
     expect(response.totalMatches).toBe(0)
   })
+
+  it('"ieh" returns subset anagrams including 2-letter words', () => {
+    const response = engine.search({
+      query: 'ieh',
+      mode: 'anagram',
+      filters: DEFAULT_FILTERS,
+      sort: 'alphabetical',
+      sortDirection: 'asc',
+    })
+    const resultWords = response.results.map((r) => r.word)
+    expect(resultWords).toContain('hei')
+    expect(resultWords).toContain('hi')
+    expect(response.totalMatches).toBeGreaterThan(2)
+  })
+
+  it('"aelpp" with subset search returns both 5-letter and shorter words', () => {
+    const response = engine.search({
+      query: 'aelpp',
+      mode: 'anagram',
+      filters: DEFAULT_FILTERS,
+      sort: 'alphabetical',
+      sortDirection: 'asc',
+    })
+    const resultWords = response.results.map((r) => r.word)
+    expect(resultWords).toContain('lappe')
+    expect(resultWords).toContain('leppa')
+    expect(resultWords).toContain('papel')
+    const hasShorterWords = response.results.some((r) => r.length < 5)
+    expect(hasShorterWords).toBe(true)
+  })
+
+  it('subset anagram results only contain letters from the given set', () => {
+    const response = engine.search({
+      query: 'hest',
+      mode: 'anagram',
+      filters: DEFAULT_FILTERS,
+      sort: 'alphabetical',
+      sortDirection: 'asc',
+    })
+    const availableLetters = ['h', 'e', 's', 't']
+    for (const result of response.results) {
+      const letterPool = [...availableLetters]
+      for (const ch of result.word) {
+        const idx = letterPool.indexOf(ch)
+        expect(idx).toBeGreaterThanOrEqual(0)
+        letterPool.splice(idx, 1)
+      }
+    }
+  })
+
+  it('anagram results respect alphabetical ascending sort', () => {
+    const response = engine.search({
+      query: 'aelpp',
+      mode: 'anagram',
+      filters: DEFAULT_FILTERS,
+      sort: 'alphabetical',
+      sortDirection: 'asc',
+    })
+    const resultWords = response.results.map((r) => r.word)
+    for (let i = 0; i < resultWords.length - 1; i++) {
+      expect(resultWords[i]!.localeCompare(resultWords[i + 1]!, 'no')).toBeLessThanOrEqual(0)
+    }
+  })
+
+  it('anagram results respect alphabetical descending sort', () => {
+    const response = engine.search({
+      query: 'aelpp',
+      mode: 'anagram',
+      filters: DEFAULT_FILTERS,
+      sort: 'alphabetical',
+      sortDirection: 'desc',
+    })
+    const resultWords = response.results.map((r) => r.word)
+    for (let i = 0; i < resultWords.length - 1; i++) {
+      expect(resultWords[i]!.localeCompare(resultWords[i + 1]!, 'no')).toBeGreaterThanOrEqual(0)
+    }
+  })
+
+  it('anagram results respect score descending sort', () => {
+    const response = engine.search({
+      query: 'aelpp',
+      mode: 'anagram',
+      filters: DEFAULT_FILTERS,
+      sort: 'score',
+      sortDirection: 'desc',
+    })
+    const scores = response.results.map((r) => r.score)
+    for (let i = 0; i < scores.length - 1; i++) {
+      expect(scores[i]!).toBeGreaterThanOrEqual(scores[i + 1]!)
+    }
+  })
+
+  it('anagram results respect length ascending sort', () => {
+    const response = engine.search({
+      query: 'aelpp',
+      mode: 'anagram',
+      filters: DEFAULT_FILTERS,
+      sort: 'length',
+      sortDirection: 'asc',
+    })
+    const lengths = response.results.map((r) => r.length)
+    for (let i = 0; i < lengths.length - 1; i++) {
+      expect(lengths[i]!).toBeLessThanOrEqual(lengths[i + 1]!)
+    }
+  })
 })
 
 describe('Sort modes', () => {
