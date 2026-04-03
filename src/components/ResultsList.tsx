@@ -29,6 +29,7 @@ export function ResultsList({
     getScrollElement: () => parentRef.current,
     estimateSize: () => 48,
     overscan: 20,
+    measureElement: (el) => el.getBoundingClientRect().height,
   })
 
   if (isLoading) {
@@ -101,12 +102,13 @@ export function ResultsList({
             return (
               <div
                 key={virtualItem.index}
+                ref={virtualizer.measureElement}
+                data-index={virtualItem.index}
                 style={{
                   position: "absolute",
                   top: 0,
                   left: 0,
                   width: "100%",
-                  height: `${virtualItem.size}px`,
                   transform: `translateY(${virtualItem.start}px)`,
                 }}
               >

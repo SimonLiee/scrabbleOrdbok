@@ -13,7 +13,7 @@ export function WordRow({ result, className, style }: WordRowProps) {
   return (
     <div
       className={cn(
-        "flex items-center justify-between px-4 py-3 border-b border-border/50 hover:bg-muted/30 transition-colors",
+        "flex items-start justify-between px-4 py-3 border-b border-border/50 hover:bg-muted/30 transition-colors",
         className
       )}
       style={style}
