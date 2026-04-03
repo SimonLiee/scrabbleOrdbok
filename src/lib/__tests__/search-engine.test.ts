@@ -75,11 +75,11 @@ describe('textSearch', () => {
   })
 })
 
-describe('wildcardSearch', () => {
+describe('text search with wildcards', () => {
   it('matches ? as any single character', () => {
     const results = engine.search({
       query: 'h?st',
-      mode: 'wildcard',
+      mode: 'text',
       filters: DEFAULT_FILTERS,
       sort: 'alphabetical',
       sortDirection: 'asc',
@@ -92,7 +92,7 @@ describe('wildcardSearch', () => {
   it('matches multiple wildcards', () => {
     const results = engine.search({
       query: 'b??',
-      mode: 'wildcard',
+      mode: 'text',
       filters: DEFAULT_FILTERS,
       sort: 'alphabetical',
       sortDirection: 'asc',
@@ -104,7 +104,7 @@ describe('wildcardSearch', () => {
   it('returns empty for empty pattern', () => {
     const results = engine.search({
       query: '',
-      mode: 'wildcard',
+      mode: 'text',
       filters: DEFAULT_FILTERS,
       sort: 'alphabetical',
       sortDirection: 'asc',

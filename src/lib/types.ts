@@ -1,4 +1,4 @@
-export type SearchMode = 'text' | 'wildcard' | 'anagram' | 'check'
+export type SearchMode = 'text' | 'anagram' | 'check'
 export type SortMode = 'relevance' | 'alphabetical' | 'score' | 'length'
 export type SortDirection = 'asc' | 'desc'
 

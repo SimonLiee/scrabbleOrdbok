@@ -22,9 +22,7 @@ export function SearchBar({
   const getPlaceholder = () => {
     switch (mode) {
       case "text":
-        return "Søk etter ord..."
-      case "wildcard":
-        return "Bruk ? for ukjent bokstav (f.eks. h?nd)"
+        return "Søk etter ord... (bruk ? for ukjent bokstav)"
       case "anagram":
         return "Skriv bokstavene dine (f.eks. aelpp)"
       case "check":

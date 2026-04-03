@@ -14,12 +14,9 @@ export function SearchModeSelector({ mode, onModeChange }: SearchModeSelectorPro
         onValueChange={(value) => onModeChange(value as SearchMode)}
         className="w-full"
       >
-        <TabsList className="grid w-full grid-cols-4 h-auto sm:h-10 gap-1 p-1">
+        <TabsList className="grid w-full grid-cols-3 h-auto sm:h-10 gap-1 p-1">
           <TabsTrigger value="text" className="text-xs sm:text-sm">
             Søk
-          </TabsTrigger>
-          <TabsTrigger value="wildcard" className="text-xs sm:text-sm">
-            Jokertegn (?)
           </TabsTrigger>
           <TabsTrigger value="anagram" className="text-xs sm:text-sm">
             Anagram

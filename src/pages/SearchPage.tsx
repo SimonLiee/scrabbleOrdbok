@@ -51,7 +51,7 @@ export function SearchPage() {
     search(query, mode, filters, sort, sortDirection)
   }, [query, mode, filters, sort, sortDirection, search])
 
-  // Auto-search for text/wildcard modes when query/filters/sort change
+  // Auto-search for text mode when query/filters/sort change
   useEffect(() => {
     if (isLoading) return
     if (mode === 'anagram' || mode === 'check') return

@@ -25,10 +25,9 @@ export class SearchEngine {
     let indices: number[]
     switch (mode) {
       case 'text':
-        indices = this.textSearch(query, this.words, filters)
-        break
-      case 'wildcard':
-        indices = this.wildcardSearch(query, this.words, filters)
+        indices = query.includes('?')
+          ? this.wildcardSearch(query, this.words, filters)
+          : this.textSearch(query, this.words, filters)
         break
       case 'anagram':
         indices = this.anagramSearch(query, this.words, filters)
