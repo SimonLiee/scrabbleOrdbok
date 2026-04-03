@@ -1,6 +1,34 @@
 import type { ReactNode } from "react"
+import { Link, useLocation } from "react-router-dom"
+import { Timer } from "lucide-react"
 import { ThemeToggle } from "./ThemeToggle"
 import { LETTER_SCORES } from "@/lib/scoring"
+
+function NavLink() {
+  const { pathname } = useLocation()
+  const isGame = pathname === "/spill"
+
+  if (isGame) {
+    return (
+      <Link
+        to="/"
+        className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+      >
+        Ordbok
+      </Link>
+    )
+  }
+
+  return (
+    <Link
+      to="/spill"
+      className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+    >
+      <Timer className="size-4" />
+      <span className="hidden sm:inline">Spillklokke</span>
+    </Link>
+  )
+}
 
 export function Layout({ children }: { children: ReactNode }) {
   const appWords = ["Bok", "Stavern"]
@@ -31,7 +59,8 @@ export function Layout({ children }: { children: ReactNode }) {
               Norsk Scrabble-ordbok
             </span>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
+            <NavLink />
             <ThemeToggle />
           </div>
         </div>
