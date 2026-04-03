@@ -25,7 +25,7 @@ function readFromURL(): SearchParamsState {
 
   const rawMode = params.get('mode')
   const mode: SearchMode =
-    rawMode === 'wildcard' || rawMode === 'anagram' || rawMode === 'text'
+    rawMode === 'wildcard' || rawMode === 'anagram' || rawMode === 'text' || rawMode === 'check'
       ? rawMode
       : 'text'
 

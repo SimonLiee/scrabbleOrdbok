@@ -113,6 +113,79 @@ describe('wildcardSearch', () => {
   })
 })
 
+describe('checkWord', () => {
+  it('returns the word if it exists', () => {
+    const results = engine.search({
+      query: 'hest',
+      mode: 'check',
+      filters: DEFAULT_FILTERS,
+      sort: 'alphabetical',
+      sortDirection: 'asc',
+    })
+    expect(results.results).toHaveLength(1)
+    expect(results.results[0]!.word).toBe('hest')
+    expect(results.totalMatches).toBe(1)
+  })
+
+  it('returns empty if word does not exist', () => {
+    const results = engine.search({
+      query: 'xyzzy',
+      mode: 'check',
+      filters: DEFAULT_FILTERS,
+      sort: 'alphabetical',
+      sortDirection: 'asc',
+    })
+    expect(results.results).toHaveLength(0)
+    expect(results.totalMatches).toBe(0)
+  })
+
+  it('returns empty for empty query', () => {
+    const results = engine.search({
+      query: '',
+      mode: 'check',
+      filters: DEFAULT_FILTERS,
+      sort: 'alphabetical',
+      sortDirection: 'asc',
+    })
+    expect(results.results).toHaveLength(0)
+  })
+
+  it('is case-insensitive', () => {
+    const results = engine.search({
+      query: 'HEST',
+      mode: 'check',
+      filters: DEFAULT_FILTERS,
+      sort: 'alphabetical',
+      sortDirection: 'asc',
+    })
+    expect(results.results).toHaveLength(1)
+    expect(results.results[0]!.word).toBe('hest')
+  })
+
+  it('returns exactly one result, never more', () => {
+    const results = engine.search({
+      query: 'test',
+      mode: 'check',
+      filters: DEFAULT_FILTERS,
+      sort: 'alphabetical',
+      sortDirection: 'asc',
+    })
+    expect(results.results).toHaveLength(1)
+    expect(results.totalMatches).toBe(1)
+  })
+
+  it('includes score for valid word', () => {
+    const results = engine.search({
+      query: 'hest',
+      mode: 'check',
+      filters: DEFAULT_FILTERS,
+      sort: 'alphabetical',
+      sortDirection: 'asc',
+    })
+    expect(results.results[0]!.score).toBeGreaterThan(0)
+  })
+})
+
 describe('anagramSearch', () => {
   it('finds exact anagrams', () => {
     const results = engine.search({

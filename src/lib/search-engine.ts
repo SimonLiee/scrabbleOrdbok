@@ -7,11 +7,13 @@ const MAX_RESULTS = 10_000
 
 export class SearchEngine {
   private readonly words: string[]
+  private readonly wordSet: Map<string, number>
   private readonly anagramIndex: Map<string, number[]>
   private readonly lengthIndex: Map<number, number[]>
 
   constructor(words: string[]) {
     this.words = words
+    this.wordSet = new Map(words.map((w, i) => [w, i]))
     this.anagramIndex = buildAnagramIndex(words)
     this.lengthIndex = buildLengthIndex(words)
   }
@@ -30,6 +32,9 @@ export class SearchEngine {
         break
       case 'anagram':
         indices = this.anagramSearch(query, this.words, filters)
+        break
+      case 'check':
+        indices = this.checkWord(query, this.words)
         break
 
     }
@@ -120,6 +125,13 @@ export class SearchEngine {
     }
 
     return Array.from(matchedIndices)
+  }
+
+  checkWord(query: string, _words: string[]): number[] {
+    const q = query.toLowerCase().trim()
+    if (!q) return []
+    const idx = this.wordSet.get(q)
+    return idx !== undefined ? [idx] : []
   }
 
   applyFilters(indices: number[], filters: SearchFilters): number[] {

@@ -130,6 +130,58 @@ describe('Wildcard search', () => {
   })
 })
 
+describe('Check word', () => {
+  it('"hest" is a valid word', () => {
+    const response = engine.search({
+      query: 'hest',
+      mode: 'check',
+      filters: DEFAULT_FILTERS,
+      sort: 'alphabetical',
+      sortDirection: 'asc',
+    })
+    expect(response.results).toHaveLength(1)
+    expect(response.results[0]!.word).toBe('hest')
+    expect(response.results[0]!.score).toBeGreaterThan(0)
+    expect(response.totalMatches).toBe(1)
+  })
+
+  it('"xyzzyplugh" is not a valid word', () => {
+    const response = engine.search({
+      query: 'xyzzyplugh',
+      mode: 'check',
+      filters: DEFAULT_FILTERS,
+      sort: 'alphabetical',
+      sortDirection: 'asc',
+    })
+    expect(response.results).toHaveLength(0)
+    expect(response.totalMatches).toBe(0)
+  })
+
+  it('Norwegian characters work: "ål" is valid', () => {
+    const response = engine.search({
+      query: 'ål',
+      mode: 'check',
+      filters: DEFAULT_FILTERS,
+      sort: 'alphabetical',
+      sortDirection: 'asc',
+    })
+    expect(response.results).toHaveLength(1)
+    expect(response.results[0]!.word).toBe('ål')
+  })
+
+  it('never returns more than one word', () => {
+    const response = engine.search({
+      query: 'hund',
+      mode: 'check',
+      filters: DEFAULT_FILTERS,
+      sort: 'alphabetical',
+      sortDirection: 'asc',
+    })
+    expect(response.results.length).toBeLessThanOrEqual(1)
+    expect(response.totalMatches).toBeLessThanOrEqual(1)
+  })
+})
+
 describe('Anagram search', () => {
   it('"aelpp" returns results including "lappe", "leppa", "papel"', () => {
     const response = engine.search({

@@ -1,4 +1,4 @@
-import { Search, X } from "lucide-react"
+import { Search, X, Loader2 } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import type { KeyboardEvent } from "react"
@@ -27,6 +27,8 @@ export function SearchBar({
         return "Bruk ? for ukjent bokstav (f.eks. h?nd)"
       case "anagram":
         return "Skriv bokstavene dine (f.eks. aelpp)"
+      case "check":
+        return "Skriv inn et ord for å sjekke om det er gyldig"
     }
   }
 
@@ -69,13 +71,17 @@ export function SearchBar({
           </button>
         )}
       </div>
-      {mode === "anagram" && (
+      {(mode === "anagram" || mode === "check") && (
         <Button 
           onClick={onSearch} 
           disabled={isSearching || !query}
           className="h-12 px-6"
         >
-          Søk
+          {isSearching ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            mode === "check" ? "Sjekk" : "Søk"
+          )}
         </Button>
       )}
     </div>
