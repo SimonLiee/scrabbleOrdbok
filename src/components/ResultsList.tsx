@@ -60,7 +60,7 @@ export function ResultsList({
       <Card className="w-full flex flex-col items-center justify-center p-12 text-center h-[calc(100vh-350px)] border-dashed border-2">
         <h3 className="text-lg font-medium text-foreground mb-2">Klar for søk</h3>
         <p className="text-muted-foreground text-sm max-w-md">
-          Velg søkemetode og skriv inn bokstaver over for å finne gyldige ord i den norske Scrabble-ordlisten (NSF).
+          Velg søkemetode og skriv inn bokstaver over for å finne gyldige Scrabble-ord.
         </p>
       </Card>
     )
