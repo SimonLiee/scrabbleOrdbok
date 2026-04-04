@@ -5,17 +5,17 @@ const LETTER_SCORES: Record<string, number> = {
   // 2 points
   f: 2, g: 2, k: 2, m: 2, o: 2,
   // 3 points
-  h: 3, p: 3,
+  h: 3,
   // 4 points
-  b: 4, u: 4, v: 4, å: 4,
+  b: 4, j: 4, p: 4, u: 4, v: 4, å: 4,
   // 5 points
   ø: 5,
   // 6 points
-  j: 6, æ: 6,
+  y: 6, æ: 6,
   // 8 points
-  c: 8, y: 8,
+  w: 8,
   // 10 points
-  w: 10, x: 10, z: 10, q: 10,
+  c: 10, x: 10, z: 10, q: 10,
 }
 
 export function scoreWord(word: string): number {
