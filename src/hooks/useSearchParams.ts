@@ -72,9 +72,12 @@ function writeToURL(state: SearchParamsState): void {
   if (state.filters.mustNotContain) params.set('not', state.filters.mustNotContain)
 
   const search = params.toString()
+  const pathname = window.location.pathname.endsWith('/')
+    ? window.location.pathname
+    : `${window.location.pathname}/`
   const newUrl = search
-    ? `${window.location.pathname}?${search}`
-    : window.location.pathname
+    ? `${pathname}?${search}`
+    : pathname
   window.history.replaceState(null, '', newUrl)
 }
 
