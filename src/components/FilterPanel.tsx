@@ -3,11 +3,12 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import type { SearchFilters } from "@/lib/types"
+import type { SearchFilters, SearchMode } from "@/lib/types"
 
 export interface FilterPanelProps {
   filters: SearchFilters
   onFiltersChange: (filters: SearchFilters) => void
+  mode: SearchMode
 }
 
 const DEFAULT_FILTERS: SearchFilters = {
@@ -17,7 +18,7 @@ const DEFAULT_FILTERS: SearchFilters = {
   mustNotContain: "",
 }
 
-export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
+export function FilterPanel({ filters, onFiltersChange, mode }: FilterPanelProps) {
   const [isOpen, setIsOpen] = useState(false)
 
   const handleReset = () => {
@@ -44,7 +45,8 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
 
       <div
         className={cn(
-          "grid grid-cols-1 md:grid-cols-4 gap-4 p-4 rounded-lg border bg-card text-card-foreground shadow-sm transition-all",
+          `grid grid-cols-1 gap-4 p-4 rounded-lg border bg-card text-card-foreground shadow-sm transition-all`,
+          mode === 'anagram' ? 'md:grid-cols-3' : 'md:grid-cols-4',
           !isOpen && "hidden md:grid"
         )}
       >
@@ -90,22 +92,24 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
           />
         </div>
 
-        <div className="space-y-2 col-span-1">
-          <Label htmlFor="mustNotContain" className="text-sm font-medium">
-            Må ikke inneholde
-          </Label>
-          <Input
-            id="mustNotContain"
-            type="text"
-            value={filters.mustNotContain}
-            onChange={(e) => handleChange("mustNotContain", e.target.value)}
-            placeholder="f.eks. zx"
-            className="w-full h-9"
-            autoComplete="off"
-            autoCorrect="off"
-            spellCheck="false"
-          />
-        </div>
+        {mode !== 'anagram' && (
+          <div className="space-y-2 col-span-1">
+            <Label htmlFor="mustNotContain" className="text-sm font-medium">
+              Må ikke inneholde
+            </Label>
+            <Input
+              id="mustNotContain"
+              type="text"
+              value={filters.mustNotContain}
+              onChange={(e) => handleChange("mustNotContain", e.target.value)}
+              placeholder="f.eks. zx"
+              className="w-full h-9"
+              autoComplete="off"
+              autoCorrect="off"
+              spellCheck="false"
+            />
+          </div>
+        )}
 
         <div className="col-span-1 flex items-end">
           <Button

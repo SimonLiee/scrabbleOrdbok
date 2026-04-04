@@ -10,7 +10,7 @@ import type { GameClockConfig } from '@/hooks/useGameClock'
 export interface GameClockSettingsProps {
   config: GameClockConfig
   onConfigChange: (config: GameClockConfig) => void
-  onStart: () => void
+  onConfirm: () => void
 }
 
 const TIME_PRESETS = [15, 20, 25, 30, 45] as const
@@ -32,7 +32,7 @@ function secondsToMs(sec: number): number {
   return sec * 1000
 }
 
-export function GameClockSettings({ config, onConfigChange, onStart }: GameClockSettingsProps) {
+export function GameClockSettings({ config, onConfigChange, onConfirm }: GameClockSettingsProps) {
   const currentMinutes = msToMinutes(config.timePerPlayer)
   const currentIncSec = msToSeconds(config.incrementPerTurn)
 
@@ -203,12 +203,12 @@ export function GameClockSettings({ config, onConfigChange, onStart }: GameClock
             {currentIncSec > 0 && <span>+{currentIncSec} sek per tur</span>}
           </div>
           <Button
-            onClick={onStart}
+            onClick={onConfirm}
             size="lg"
             className="w-full h-12 text-base font-bold tracking-wide gap-2"
           >
             <Timer className="size-5" />
-            Start klokke
+            Velg tidskontroll
           </Button>
         </div>
       </CardContent>

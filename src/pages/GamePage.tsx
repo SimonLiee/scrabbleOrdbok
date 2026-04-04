@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Layout } from '@/components/Layout'
 import { GameClock } from '@/components/game/GameClock'
 import { GameClockSettings } from '@/components/game/GameClockSettings'
@@ -8,6 +8,7 @@ import type { GameClockConfig } from '@/hooks/useGameClock'
 
 export function GamePage() {
   const clock = useGameClock()
+  const [isConfirmed, setIsConfirmed] = useState(false)
 
   const isInGame = clock.isRunning || clock.isPaused
 
@@ -22,24 +23,29 @@ export function GamePage() {
     clock.actions.updateConfig(config)
   }
 
-  function handleStart() {
-    clock.actions.start()
+  function handleConfirm() {
+    setIsConfirmed(true)
+  }
+
+  function handleReset() {
+    clock.actions.reset()
+    setIsConfirmed(false)
   }
 
   return (
     <Layout>
       <div className="flex flex-col gap-4">
-        {!isInGame ? (
+        {!isConfirmed && !isInGame ? (
           <GameClockSettings
             config={clock.config}
             onConfigChange={handleConfigChange}
-            onStart={handleStart}
+            onConfirm={handleConfirm}
           />
         ) : (
           <>
             <GameClock
               state={clock}
-              actions={clock.actions}
+              actions={{ ...clock.actions, reset: handleReset }}
             />
             <GameWordChecker />
           </>

@@ -131,7 +131,7 @@ export function SearchPage() {
           mode={mode}
           isSearching={isSearching}
         />
-        {!isCheckMode && <FilterPanel filters={filters} onFiltersChange={setFilters} />}
+        {!isCheckMode && <FilterPanel filters={filters} onFiltersChange={setFilters} mode={mode} />}
       </div>
 
       {isCheckMode ? (

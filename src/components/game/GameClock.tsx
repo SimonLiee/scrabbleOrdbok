@@ -87,6 +87,7 @@ export function GameClock({ state, actions }: GameClockProps) {
   } = state
 
   const canSwitch = isRunning && !isPaused && activePlayer !== null
+  const isReady = !isRunning && !isPaused
 
   return (
     <Card className="w-full">
@@ -108,14 +109,25 @@ export function GameClock({ state, actions }: GameClockProps) {
           />
         </div>
 
-        <Button
-          onClick={actions.switchTurn}
-          disabled={!canSwitch}
-          size="lg"
-          className="w-full h-14 text-base font-bold tracking-wide"
-        >
-          Bytt tur
-        </Button>
+        {isReady ? (
+          <Button
+            onClick={actions.start}
+            size="lg"
+            className="w-full h-14 text-base font-bold tracking-wide gap-2"
+          >
+            <Play className="size-5" />
+            Start klokke
+          </Button>
+        ) : (
+          <Button
+            onClick={actions.switchTurn}
+            disabled={!canSwitch}
+            size="lg"
+            className="w-full h-14 text-base font-bold tracking-wide"
+          >
+            Bytt tur
+          </Button>
+        )}
 
         <div className="flex gap-2">
           {!isPaused ? (
