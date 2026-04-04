@@ -1,11 +1,10 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Layout } from '@/components/Layout'
 import { SearchBar } from '@/components/SearchBar'
 import { SearchModeSelector } from '@/components/SearchModeSelector'
 import { FilterPanel } from '@/components/FilterPanel'
 import { ResultsList } from '@/components/ResultsList'
 import { SortControls } from '@/components/SortControls'
-import { LoadingScreen } from '@/components/LoadingScreen'
 import { CheckResult } from '@/components/CheckResult'
 import { useSearch } from '@/hooks/useSearch'
 import { useSearchParams } from '@/hooks/useSearchParams'
@@ -35,10 +34,12 @@ export function SearchPage() {
     search,
   } = useSearch()
 
-  const [hasSearched, setHasSearched] = useState(false)
+  const hasInitialQuery = !!query.trim()
+  const [hasSearched, setHasSearched] = useState(hasInitialQuery)
   const [lastCheckedQuery, setLastCheckedQuery] = useState('')
   const pendingCheckQueryRef = useRef('')
   const initialSearchDoneRef = useRef(false)
+  const autoSearchReadyRef = useRef(false)
 
   const triggerSearch = useCallback(() => {
     if (!query.trim()) {
@@ -51,9 +52,12 @@ export function SearchPage() {
     search(query, mode, filters, sort, sortDirection)
   }, [query, mode, filters, sort, sortDirection, search])
 
-  // Auto-search for text mode when query/filters/sort change
   useEffect(() => {
     if (isLoading) return
+    if (!autoSearchReadyRef.current) {
+      autoSearchReadyRef.current = true
+      return
+    }
     if (mode === 'anagram' || mode === 'check') return
     if (!query.trim()) return
 
@@ -70,8 +74,7 @@ export function SearchPage() {
     search(query, mode, filters, sort, sortDirection)
   }, [sort, sortDirection]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // If URL had a query on mount, trigger search after loading completes
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (isLoading) return
     if (initialSearchDoneRef.current) return
     initialSearchDoneRef.current = true
@@ -82,7 +85,7 @@ export function SearchPage() {
     if (mode === 'check') {
       pendingCheckQueryRef.current = query.trim()
     }
-    search(query, mode, filters, sort, sortDirection)
+    search(query, mode, filters, sort, sortDirection, { immediate: true })
   }, [isLoading]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Sync lastCheckedQuery atomically with results to prevent stale tiles
@@ -107,10 +110,6 @@ export function SearchPage() {
   const handleSearch = useCallback(() => {
     triggerSearch()
   }, [triggerSearch])
-
-  if (isLoading) {
-    return <LoadingScreen />
-  }
 
   const isCheckMode = mode === 'check'
 
@@ -140,6 +139,7 @@ export function SearchPage() {
           result={results[0] ?? null}
           hasSearched={hasSearched}
           isSearching={isSearching}
+          isLoading={isLoading}
         />
       ) : (
         <div className="space-y-3">

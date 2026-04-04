@@ -32,15 +32,22 @@ export function ResultsList({
     measureElement: (el) => el.getBoundingClientRect().height,
   })
 
-  if (isLoading) {
+  if (isLoading || (!hasSearched && !isSearching)) {
     return (
-      <Card className="w-full flex flex-col items-center justify-center p-12 h-[calc(100vh-350px)] animate-pulse">
-        <div className="h-4 bg-muted/60 w-1/3 rounded mb-6"></div>
-        <div className="w-full space-y-3">
-          {Array.from({ length: 10 }).map((_, i) => (
-            <div key={i} className="h-10 bg-muted/30 w-full rounded"></div>
-          ))}
-        </div>
+      <Card className="w-full flex flex-col items-center justify-center p-12 text-center h-[calc(100vh-350px)] border-dashed border-2">
+        {isLoading ? (
+          <div className="flex flex-col items-center gap-4">
+            <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+            <p className="text-muted-foreground text-sm">Laster ordlisten...</p>
+          </div>
+        ) : (
+          <>
+            <h3 className="text-lg font-medium text-foreground mb-2">Klar for søk</h3>
+            <p className="text-muted-foreground text-sm max-w-md">
+              Velg søkemetode og skriv inn bokstaver over for å finne gyldige Scrabble-ord.
+            </p>
+          </>
+        )}
       </Card>
     )
   }
@@ -52,17 +59,6 @@ export function ResultsList({
           <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
           <p className="text-muted-foreground animate-pulse">Søker...</p>
         </div>
-      </Card>
-    )
-  }
-
-  if (!hasSearched) {
-    return (
-      <Card className="w-full flex flex-col items-center justify-center p-12 text-center h-[calc(100vh-350px)] border-dashed border-2">
-        <h3 className="text-lg font-medium text-foreground mb-2">Klar for søk</h3>
-        <p className="text-muted-foreground text-sm max-w-md">
-          Velg søkemetode og skriv inn bokstaver over for å finne gyldige Scrabble-ord.
-        </p>
       </Card>
     )
   }

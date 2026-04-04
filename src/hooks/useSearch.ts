@@ -51,7 +51,7 @@ export function useSearch() {
   }, [])
 
   const search = useCallback(
-    (query: string, mode: SearchMode, filters: SearchFilters, sort: SortMode, sortDirection: SortDirection) => {
+    (query: string, mode: SearchMode, filters: SearchFilters, sort: SortMode, sortDirection: SortDirection, options?: { immediate?: boolean }) => {
       if (debounceTimerRef.current) {
         clearTimeout(debounceTimerRef.current)
       }
@@ -75,7 +75,7 @@ export function useSearch() {
           })
       }
 
-      if (mode === 'anagram') {
+      if (mode === 'anagram' || options?.immediate) {
         doSearch()
       } else {
         debounceTimerRef.current = setTimeout(doSearch, 300)

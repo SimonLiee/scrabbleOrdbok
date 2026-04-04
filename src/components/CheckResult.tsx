@@ -9,9 +9,30 @@ export interface CheckResultProps {
   result: SearchResult | null
   hasSearched: boolean
   isSearching: boolean
+  isLoading: boolean
 }
 
-export function CheckResult({ checkedWord, result, hasSearched, isSearching }: CheckResultProps) {
+export function CheckResult({ checkedWord, result, hasSearched, isSearching, isLoading }: CheckResultProps) {
+  if (isLoading || (!hasSearched && !isSearching)) {
+    return (
+      <Card className="w-full flex flex-col items-center justify-center p-12 text-center border-dashed border-2">
+        {isLoading ? (
+          <div className="flex flex-col items-center gap-4">
+            <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+            <p className="text-muted-foreground text-sm">Laster ordlisten...</p>
+          </div>
+        ) : (
+          <>
+            <h3 className="text-lg font-medium text-foreground mb-2">Sjekk om et ord er gyldig</h3>
+            <p className="text-muted-foreground text-sm max-w-md">
+              Skriv inn et ord og trykk «Sjekk» for å se om det er godkjent i Scrabble.
+            </p>
+          </>
+        )}
+      </Card>
+    )
+  }
+
   if (isSearching) {
     return (
       <Card className="w-full flex items-center justify-center p-12">
@@ -19,17 +40,6 @@ export function CheckResult({ checkedWord, result, hasSearched, isSearching }: C
           <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
           <p className="text-muted-foreground animate-pulse">Sjekker...</p>
         </div>
-      </Card>
-    )
-  }
-
-  if (!hasSearched) {
-    return (
-      <Card className="w-full flex flex-col items-center justify-center p-12 text-center border-dashed border-2">
-        <h3 className="text-lg font-medium text-foreground mb-2">Sjekk om et ord er gyldig</h3>
-        <p className="text-muted-foreground text-sm max-w-md">
-          Skriv inn et ord og trykk «Sjekk» for å se om det er godkjent i Scrabble.
-        </p>
       </Card>
     )
   }
