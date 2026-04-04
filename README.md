@@ -1,73 +1,40 @@
-# React + TypeScript + Vite
+# Bok Stavern
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Norwegian Scrabble word search tool. Search, find anagrams, and validate words against the official Norwegian Scrabble word list.
 
-Currently, two official plugins are available:
+**Live site:** [simonliee.github.io/scrabbleOrdbok](https://simonliee.github.io/scrabbleOrdbok/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+- **Text search** with wildcard support (`?` for any letter)
+- **Anagram search** with subset matching
+- **Word checker** (no-cheat mode) — validates a single word without revealing others
+- Norwegian Scrabble letter scores displayed as tiles
+- Filters: word length, must contain, must not contain
+- Sort by relevance, alphabetical, score, or length
+- Game mode with chess-style clock for two players
+- Dark/light theme
+- Fully client-side — no backend required
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Tech stack
 
-## Expanding the ESLint configuration
+React, TypeScript, Vite, Tailwind CSS, shadcn/ui, Bun
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Development
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```sh
+bun install
+bun dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Word list
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+The word list is sourced from [Norsk Scrabbleforbund (NSF)](https://www2.scrabbleforbundet.no/?page_id=1488).
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## License
+
+[MIT](LICENSE) — free to use, modify, and distribute with attribution.
+
+## AI disclosure
+
+This project was built with assistance from AI tools.
