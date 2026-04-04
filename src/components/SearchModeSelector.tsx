@@ -1,7 +1,7 @@
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import type { SearchMode } from "@/lib/types"
 
-export interface SearchModeSelectorProps {
+interface SearchModeSelectorProps {
   mode: SearchMode
   onModeChange: (mode: SearchMode) => void
 }

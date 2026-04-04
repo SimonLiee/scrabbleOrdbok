@@ -25,6 +25,9 @@ export function useSearch() {
   const workerApiRef = useRef<Comlink.Remote<WorkerApi> | null>(null)
   const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
+  const toErrorMessage = (err: unknown) =>
+    err instanceof Error ? err.message : String(err)
+
   useEffect(() => {
     const worker = new Worker(
       new URL('../workers/search.worker.ts', import.meta.url),
@@ -41,7 +44,7 @@ export function useSearch() {
         setIsLoading(false)
       })
       .catch((err: unknown) => {
-        setError(err instanceof Error ? err.message : String(err))
+        setError(toErrorMessage(err))
         setIsLoading(false)
       })
 
@@ -70,7 +73,7 @@ export function useSearch() {
             setIsSearching(false)
           })
           .catch((err: unknown) => {
-            setError(err instanceof Error ? err.message : String(err))
+            setError(toErrorMessage(err))
             setIsSearching(false)
           })
       }

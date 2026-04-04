@@ -5,7 +5,7 @@ import { WordRow } from "./WordRow"
 import type { SearchResult } from "@/lib/types"
 import { ResultsHeader } from "./ResultsHeader"
 
-export interface ResultsListProps {
+interface ResultsListProps {
   results: SearchResult[]
   totalMatches: number
   searchTimeMs: number

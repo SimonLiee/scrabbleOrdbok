@@ -4,7 +4,7 @@ import { CheckCircle2, XCircle } from "lucide-react"
 import { LETTER_SCORES } from "@/lib/scoring"
 import type { SearchResult } from "@/lib/types"
 
-export interface CheckResultProps {
+interface CheckResultProps {
   checkedWord: string
   result: SearchResult | null
   hasSearched: boolean

@@ -59,10 +59,8 @@ export function SearchPage() {
       return
     }
     if (mode === 'anagram' || mode === 'check') return
-    if (!query.trim()) return
 
-    setHasSearched(true)
-    search(query, mode, filters, sort, sortDirection)
+    triggerSearch()
   }, [query, mode, filters, sort, sortDirection, isLoading]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Re-sort anagram results when sort/sortDirection changes (without requiring button press)
@@ -71,7 +69,7 @@ export function SearchPage() {
     if (mode !== 'anagram') return
     if (!hasSearched || !query.trim()) return
 
-    search(query, mode, filters, sort, sortDirection)
+    triggerSearch()
   }, [sort, sortDirection]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useLayoutEffect(() => {

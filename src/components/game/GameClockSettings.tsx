@@ -7,7 +7,7 @@ import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { Timer } from 'lucide-react'
 import type { GameClockConfig } from '@/hooks/useGameClock'
 
-export interface GameClockSettingsProps {
+interface GameClockSettingsProps {
   config: GameClockConfig
   onConfigChange: (config: GameClockConfig) => void
   onConfirm: () => void

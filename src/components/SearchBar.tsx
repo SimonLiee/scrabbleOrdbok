@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import type { KeyboardEvent } from "react"
 import type { SearchMode } from "@/lib/types"
 
-export interface SearchBarProps {
+interface SearchBarProps {
   query: string
   onQueryChange: (query: string) => void
   onSearch: () => void

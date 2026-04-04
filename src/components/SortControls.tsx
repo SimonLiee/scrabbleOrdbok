@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import type { SortDirection, SortMode } from "@/lib/types"
 
-export interface SortControlsProps {
+interface SortControlsProps {
   sort: SortMode
   sortDirection: SortDirection
   onSortChange: (sort: SortMode) => void

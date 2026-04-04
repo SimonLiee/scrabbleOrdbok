@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import type { SearchFilters, SearchMode } from "@/lib/types"
 
-export interface FilterPanelProps {
+interface FilterPanelProps {
   filters: SearchFilters
   onFiltersChange: (filters: SearchFilters) => void
   mode: SearchMode

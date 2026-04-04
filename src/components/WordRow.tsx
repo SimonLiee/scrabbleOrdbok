@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils"
 import type { SearchResult } from "@/lib/types"
 import { LETTER_SCORES } from "@/lib/scoring"
 
-export interface WordRowProps {
+interface WordRowProps {
   result: SearchResult
   className?: string
   style?: React.CSSProperties

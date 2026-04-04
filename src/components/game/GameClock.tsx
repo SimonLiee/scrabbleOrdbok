@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import type { GameClockState, GameClockActions } from '@/hooks/useGameClock'
 
-export interface GameClockProps {
+interface GameClockProps {
   state: GameClockState
   actions: GameClockActions
 }
@@ -35,8 +35,8 @@ function PlayerTimer({ label, timeMs, turnCount, isActive, isRunning }: PlayerTi
   const timeColor = isOvertime
     ? 'text-red-500 dark:text-red-400'
     : isWarning
-    ? 'text-amber-500 dark:text-amber-400'
-    : 'text-[#3e2723] dark:text-[#3e2723]'
+      ? 'text-amber-500 dark:text-amber-400'
+      : 'text-[#3e2723] dark:text-[#3e2723]'
 
   return (
     <div

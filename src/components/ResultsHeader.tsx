@@ -1,4 +1,4 @@
-export interface ResultsHeaderProps {
+interface ResultsHeaderProps {
   totalMatches: number
   displayedCount: number
   searchTimeMs: number
